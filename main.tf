@@ -5,7 +5,7 @@
 #
 #
 # Author: Boris Katsnelson
-#   Date: 10/2021
+#   Date: 02/2022
 #
 ###########################################################
 
@@ -14,9 +14,7 @@
 #----------------------------------------------------------
 
 terraform {
-  backend "remote" {}
-
-  required_version = ">= 1.0.4"
+  required_version = ">= 1.1.5"
 }
 
 provider "azurerm" {
@@ -29,6 +27,7 @@ provider "azurerm" {
 
 locals {
   address_space = var.address_space_map[var.location]
+  loc_acronym   = var.loc_acronym_map[var.location]
 }
 
 #----------------------------------------------------------
@@ -38,7 +37,10 @@ locals {
 module "resource_groups" {
   source = "./modules/resource_groups"
 
-  location = var.location
+  location    = var.location
+  app         = var.app
+  environment = var.environment
+  loc_acronym = local.loc_acronym
 }
 
 #----------------------------------------------------------
@@ -50,6 +52,9 @@ module "network_watcher" {
 
   location            = var.location
   resource_group_name = module.resource_groups.rg_hub_infra_name
+  app                 = var.app
+  environment         = var.environment
+  loc_acronym         = local.loc_acronym
 }
 
 #----------------------------------------------------------

@@ -1,10 +1,27 @@
 variable "location" {
-  type = string
+  type    = string
+  default = "eastus"
+}
+variable "app" {
+  type    = string
+  default = "hub"
+}
+variable "environment" {
+  type    = string
+  default = "hub"
+}
+variable "loc_acronym_map" {
+  type = map(any)
+  default = {
+    eastus    = "use",
+    eastus2   = "use2",
+    uscentral = "uscn"
+  }
 }
 variable "address_space_map" {
   type = map(any)
   default = {
-    eastus = ["10.130.0.0/16", "10.131.0.0/16"]
+    eastus = ["10.200.0.0/17", "10.201.0.0/17"]
   }
 }
 variable "authorized_ip_ranges" {
