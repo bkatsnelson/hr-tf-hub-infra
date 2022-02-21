@@ -2,13 +2,17 @@ variable "location" {
   type    = string
   default = "eastus"
 }
+variable "company" {
+  type    = string
+  default = "smbc"
+}
 variable "app" {
   type    = string
   default = "hub"
 }
 variable "environment" {
   type    = string
-  default = "hub"
+  default = "shr"
 }
 variable "loc_acronym_map" {
   type = map(any)

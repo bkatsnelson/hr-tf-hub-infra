@@ -4,11 +4,11 @@ output "hub_infra_vnet_id" {
 output "hub_infra_vnet_name" {
   value = azurerm_virtual_network.hub_infra_vnet.name
 }
-output "dmz_subnet_id" {
-  value = azurerm_subnet.dmz_subnet.id
+output "js_linux_subnet_id" {
+  value = azurerm_subnet.js_linux_subnet.id
 }
-output "mgmt_subnet_id" {
-  value = azurerm_subnet.mgmt_subnet.id
+output "js_windows_subnet_id" {
+  value = azurerm_subnet.js_windows_subnet.id
 }
 output "storage_accounts_subnet_id" {
   value = azurerm_subnet.storage_accounts_subnet.id

@@ -4,9 +4,22 @@ variable "location" {
 variable "resource_group_name" {
   type = string
 }
-variable "dmz_subnet_id" {
+variable "app" {
   type = string
 }
-variable "asg_dmz_id" {
+variable "environment" {
   type = string
 }
+variable "js_linux_subnet_id" {
+  type = string
+}
+variable "asg_hub_js_linux_id" {
+  type = string
+}
+variable "js_windows_subnet_id" {
+  type = string
+}
+variable "asg_hub_js_windows_id" {
+  type = string
+}
+
