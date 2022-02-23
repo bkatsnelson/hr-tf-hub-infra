@@ -11,3 +11,13 @@ resource "azurerm_resource_group" "rg-hub-infra" {
     Cost_Center = "Network"
   }
 }
+
+resource "azurerm_resource_group" "NetworkWatcherRG" {
+  name     = "NetworkWatcherRG"
+  location = var.location
+  tags = {
+    Environment = "Hub"
+    Cost_Center = "Network"
+  }
+}
+

@@ -4,7 +4,7 @@
 #---------------------------------------------------------------
 
 locals {
-  vm_prefix = "vm${var.app}$[var.environment}linux"
+  vm_prefix = "vm${var.app}${var.environment}linux"
 }
 
 #---------------------------------------------------------------
@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "pip_vmlinux01" {
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
-  domain_name_label   = "vm${local.vm_prefix}01"
+  domain_name_label   = "${local.vm_prefix}01"
 
   tags = {
     Environment = "Hub"
@@ -32,7 +32,8 @@ resource "azurerm_network_interface" "nic_vmlinux01" {
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = var.js_linux_subnet_id
-    private_ip_address_allocation = "Static"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.pip_vmlinux01.id
   }
 }
 
@@ -47,7 +48,7 @@ resource "tls_private_key" "vmlinux01_private_key" {
 }
 
 resource "azurerm_ssh_public_key" "vmlinux01_ssh_public_key" {
-  name                = "${local.vm_prefix}01_ssh_public_key"
+  name                = "vmhubshrlinux01_ssh_public_key"
   location            = var.location
   resource_group_name = var.resource_group_name
   public_key          = tls_private_key.vmlinux01_private_key.public_key_openssh
@@ -119,7 +120,7 @@ resource "azurerm_virtual_machine_extension" "install_sqlcmd_extension" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute": "curl https://packages.microsoft.com/config/rhel/8/prod.repo > /etc/yum.repos.d/msprod.repo; sudo yum install -y mssql-tools unixODBC-devel"
+        "commandToExecute": "curl https://packages.microsoft.com/config/rhel/8/prod.repo > /etc/yum.repos.d/msprod.repo; sudo ACCEPT_EULA=Y yum install -y mssql-tools unixODBC-devel"
     }
 SETTINGS
 
@@ -127,6 +128,10 @@ SETTINGS
     Environment = var.environment
     Cost_Center = "Apps"
   }
+
+  depends_on = [
+    zurerm_virtual_machine_extension.install_postgres_extension
+  ]
 
 }
 

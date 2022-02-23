@@ -53,10 +53,23 @@ module "resource_groups" {
 module "network_watcher" {
   source = "./modules/network_watcher"
 
-  location           = var.location
-  resource_qualifier = local.resource_qualifier
+  location            = var.location
+  resource_qualifier  = local.resource_qualifier
+  resource_group_name = module.resource_groups.NetworkWatcherRG_Name
+
 }
 
+#----------------------------------------------------------
+# Create Hub Log Analytics Wowrkspace
+#----------------------------------------------------------
+
+module "log_analytics_workspace" {
+  source              = "./modules/log_analytics_workspace"
+  location            = var.location
+  resource_qualifier  = local.resource_qualifier
+  resource_group_name = module.resource_groups.rg_hub_infra_name
+
+}
 #----------------------------------------------------------
 # Create Application Security Groups
 #----------------------------------------------------------
