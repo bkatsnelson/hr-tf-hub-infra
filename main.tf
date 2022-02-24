@@ -20,6 +20,12 @@ terraform {
       version = "~>2.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "cloud-shell-storage-eastus"
+    storage_account_name = "stsmbcllabbkatsnelsonuse"
+    container_name       = "hr-tf-hub-infra"
+    key                  = "terraform.state"
+  }
 }
 provider "azurerm" {
   features {}
