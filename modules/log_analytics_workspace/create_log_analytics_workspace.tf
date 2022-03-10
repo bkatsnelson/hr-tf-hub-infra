@@ -4,9 +4,5 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
-
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 }

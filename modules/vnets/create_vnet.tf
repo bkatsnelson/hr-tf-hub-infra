@@ -26,11 +26,7 @@ resource "azurerm_virtual_network" "hub_infra_vnet" {
   resource_group_name = var.resource_group_name
   address_space       = var.address_space
   location            = var.location
-
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 
 }
 
@@ -94,21 +90,18 @@ resource "azurerm_subnet_network_security_group_association" "storage_accounts_s
 
 resource "azurerm_subnet" "key_vault_subnet" {
 
-  name                                           = "snet-key-vault-001"
+  name                                           = "snet-key-vaults-001"
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.hub_infra_vnet.name
   address_prefixes                               = ["${local.address_prefix}.5.0/24"]
   enforce_private_link_endpoint_network_policies = true
 
 }
-resource "azurerm_subnet" "ad_subnet" {
 
-  name                                           = "snet-ad-001"
-  resource_group_name                            = var.resource_group_name
-  virtual_network_name                           = azurerm_virtual_network.hub_infra_vnet.name
-  address_prefixes                               = ["${local.address_prefix}.6.0/24"]
-  enforce_private_link_endpoint_network_policies = true
-
+resource "azurerm_subnet_network_security_group_association" "key_vaults_subnet_nsg_association" {
+  subnet_id                 = azurerm_subnet.key_vault_subnet.id
+  network_security_group_id = var.nsg_key_vaults_id
 }
+
 
 

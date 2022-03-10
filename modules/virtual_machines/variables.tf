@@ -22,4 +22,7 @@ variable "js_windows_subnet_id" {
 variable "asg_hub_js_windows_id" {
   type = string
 }
+variable "tags" {
+  type = map(any)
+}
 

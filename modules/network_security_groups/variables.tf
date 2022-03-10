@@ -4,6 +4,9 @@ variable "location" {
 variable "resource_group_name" {
   type = string
 }
+variable "loc_acronym" {
+  type = string
+}
 variable "authorized_ip_ranges" {
   type = list(any)
 }
@@ -12,4 +15,7 @@ variable "asg_hub_js_linux_id" {
 }
 variable "asg_hub_js_windows_id" {
   type = string
+}
+variable "tags" {
+  type = map(any)
 }

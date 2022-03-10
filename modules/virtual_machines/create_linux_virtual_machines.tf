@@ -18,11 +18,7 @@ resource "azurerm_public_ip" "pip_vmlinux01" {
   allocation_method   = "Static"
   domain_name_label   = "${local.vm_prefix}01"
   sku                 = "Basic"
-
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 }
 
 resource "azurerm_network_interface" "nic_vmlinux01" {
@@ -37,10 +33,7 @@ resource "azurerm_network_interface" "nic_vmlinux01" {
     public_ip_address_id          = azurerm_public_ip.pip_vmlinux01.id
   }
 
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface_application_security_group_association" "asg_dmz_vmlinux01_association" {
@@ -58,10 +51,7 @@ resource "azurerm_ssh_public_key" "vmlinux01_ssh_public_key" {
   location            = var.location
   resource_group_name = var.resource_group_name
   public_key          = tls_private_key.vmlinux01_private_key.public_key_openssh
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 }
 
 resource "azurerm_linux_virtual_machine" "vmlinux01" {
@@ -93,10 +83,7 @@ resource "azurerm_linux_virtual_machine" "vmlinux01" {
     public_key = tls_private_key.vmlinux01_private_key.public_key_openssh
   }
 
-  tags = {
-    Environment = var.environment
-    Cost_Center = "Apps"
-  }
+  tags = var.tags
 }
 
 #----------------------------------------------------------
@@ -114,6 +101,9 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "vmlinux91_auto_shutdown
   notification_settings {
     enabled = false
   }
+
+  tags = var.tags
+
 }
 
 #----------------------------------------------------------
@@ -136,9 +126,6 @@ resource "azurerm_virtual_machine_extension" "install_dbtools_extension" {
     }
 SETTINGS
 
-  tags = {
-    Environment = var.environment
-    Cost_Center = "Apps"
-  }
+  tags = var.tags
 
 }

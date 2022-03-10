@@ -7,3 +7,6 @@ variable "resource_qualifier" {
 variable "resource_group_name" {
   type = string
 }
+variable "tags" {
+  type = map(any)
+}

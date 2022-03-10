@@ -8,3 +8,6 @@ output "nsg_allowrdp_001_id" {
 output "nsg_hub_storage_accounts_id" {
   value = azurerm_network_security_group.nsg_hub_storage_accounts.id
 }
+output "nsg_hub_key_vaults_id" {
+  value = azurerm_network_security_group.nsg_hub_key_vaults.id
+}

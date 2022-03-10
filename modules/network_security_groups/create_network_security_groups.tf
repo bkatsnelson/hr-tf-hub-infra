@@ -19,10 +19,7 @@ resource "azurerm_network_security_group" "nsg_allowssh_001" {
     destination_application_security_group_ids = [var.asg_hub_js_linux_id]
   }
 
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_security_group" "nsg_allowrdp_001" {
@@ -42,20 +39,20 @@ resource "azurerm_network_security_group" "nsg_allowrdp_001" {
     destination_application_security_group_ids = [var.asg_hub_js_windows_id]
   }
 
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags = var.tags
 }
 
 resource "azurerm_network_security_group" "nsg_hub_storage_accounts" {
-  name                = "nsg-storage-accounts-hub-infra-${var.location}"
+  name                = "nsg-hub-storage-accounts-${var.loc_acronym}"
   location            = var.location
   resource_group_name = var.resource_group_name
+  tags                = var.tags
+}
 
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+resource "azurerm_network_security_group" "nsg_hub_key_vaults" {
+  name                = "nsg-hub-key-vaults-${var.loc_acronym}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
 }
 

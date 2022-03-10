@@ -9,9 +9,5 @@ resource "azurerm_network_watcher" "hub-network-watcher" {
   name                = "nw-${var.resource_qualifier}"
   resource_group_name = var.resource_group_name
   location            = var.location
-
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 }

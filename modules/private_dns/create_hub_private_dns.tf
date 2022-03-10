@@ -5,10 +5,7 @@
 resource "azurerm_private_dns_zone" "hub_smbc_private_dns" {
   name                = var.smbc_hub_domain
   resource_group_name = var.resource_group_name
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "pdnslink_vnet_hub_smbc" {
@@ -17,8 +14,5 @@ resource "azurerm_private_dns_zone_virtual_network_link" "pdnslink_vnet_hub_smbc
   private_dns_zone_name = azurerm_private_dns_zone.hub_smbc_private_dns.name
   virtual_network_id    = var.hub_infra_vnet_id
   registration_enabled  = true
-  tags = {
-    Environment = "Hub"
-    Cost_Center = "Network"
-  }
+  tags                  = var.tags
 }

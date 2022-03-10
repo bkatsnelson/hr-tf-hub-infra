@@ -7,3 +7,6 @@ variable "resource_group_name" {
 variable "loc_acronym" {
   type = string
 }
+variable "tags" {
+  type = map(any)
+}

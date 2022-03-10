@@ -4,3 +4,6 @@ variable "location" {
 variable "resource_qualifier" {
   type = string
 }
+variable "tags" {
+  type = map(any)
+}

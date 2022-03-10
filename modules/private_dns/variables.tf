@@ -10,3 +10,6 @@ variable "smbc_hub_domain" {
 variable "hub_infra_vnet_id" {
   type = string
 }
+variable "tags" {
+  type = map(any)
+}
