@@ -11,6 +11,10 @@ variable "subscription_id" {
   type    = string
   default = "c15bb9c5-2f4d-4112-b6d0-aa2434d885c9"
 }
+variable "tenant_id" {
+  type    = string
+  default = "c7f6413d-1e73-45d2-b0da-a68713b515a7"
+}
 variable "location" {
   type = string
 }
@@ -51,4 +55,3 @@ variable "smbc_hub_domain" {
   type    = string
   default = "hub.smbcgroup.azure.com"
 }
-

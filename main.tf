@@ -31,8 +31,8 @@ terraform {
 }
 provider "azurerm" {
   features {}
-  subscription_id = "c15bb9c5-2f4d-4112-b6d0-aa2434d885c9"
-  tenant_id       = "c7f6413d-1e73-45d2-b0da-a68713b515a7"
+  subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
 }
 
 #----------------------------------------------------------
@@ -166,15 +166,18 @@ module "hub_private_dns" {
 module "virtual_machines" {
   source = "./modules/virtual_machines"
 
-  location              = var.location
-  resource_group_name   = module.resource_groups.rg_hub_infra_name
-  app                   = var.app
-  environment           = var.environment
-  js_linux_subnet_id    = module.hub_infra_vnet.js_linux_subnet_id
-  asg_hub_js_linux_id   = module.application_security_groups.asg_hub_js_linux_id
-  js_windows_subnet_id  = module.hub_infra_vnet.js_windows_subnet_id
-  asg_hub_js_windows_id = module.application_security_groups.asg_hub_js_windows_id
-  tags                  = local.tags
+  location                   = var.location
+  resource_group_name        = module.resource_groups.rg_hub_infra_name
+  resource_qualifier         = local.resource_qualifier
+  app                        = var.app
+  environment                = var.environment
+  js_linux_subnet_id         = module.hub_infra_vnet.js_linux_subnet_id
+  asg_hub_js_linux_id        = module.application_security_groups.asg_hub_js_linux_id
+  js_windows_subnet_id       = module.hub_infra_vnet.js_windows_subnet_id
+  asg_hub_js_windows_id      = module.application_security_groups.asg_hub_js_windows_id
+  hub_law_workspace_id       = module.log_analytics_workspace.hub_law_workspace_id
+  hub_law_primary_shared_key = module.log_analytics_workspace.hub_law_primary_shared_key
+  tags                       = local.tags
 }
 
 #----------------------------------------------------------
