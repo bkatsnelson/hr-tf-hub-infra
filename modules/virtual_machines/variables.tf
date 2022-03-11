@@ -34,4 +34,8 @@ variable "hub_law_workspace_id" {
 variable "hub_law_primary_shared_key" {
   type = string
 }
+variable "authorized_ip_ranges" {
+  type = list(any)
+}
+
 

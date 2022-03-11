@@ -23,10 +23,12 @@ variable "company" {
   default = "smbc"
 }
 variable "app" {
-  type = string
+  type    = string
+  default = "hub"
 }
 variable "environment" {
-  type = string
+  type    = string
+  default = "shr"
 }
 variable "cost_center" {
   type    = string
@@ -49,7 +51,7 @@ variable "address_space_map" {
 }
 variable "authorized_ip_ranges" {
   type    = list(any)
-  default = ["47.19.117.0/24"]
+  default = ["47.19.117.0/24", "216.83.80.0/20"]
 }
 variable "smbc_hub_domain" {
   type    = string

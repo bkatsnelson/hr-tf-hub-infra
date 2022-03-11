@@ -47,6 +47,9 @@ resource "azurerm_subnet" "js_linux_subnet" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.hub_infra_vnet.name
   address_prefixes     = ["${local.address_prefix}.2.0/24"]
+  // Needs storage for diagnostics
+  service_endpoints = ["Microsoft.Storage"]
+
 }
 
 resource "azurerm_subnet_network_security_group_association" "js_linux_subnet_nsg_association" {
@@ -60,6 +63,7 @@ resource "azurerm_subnet" "js_windows_subnet" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.hub_infra_vnet.name
   address_prefixes     = ["${local.address_prefix}.3.0/24"]
+  service_endpoints    = ["Microsoft.Storage"]
 
 }
 
@@ -80,6 +84,7 @@ resource "azurerm_subnet" "storage_accounts_subnet" {
   virtual_network_name                           = azurerm_virtual_network.hub_infra_vnet.name
   address_prefixes                               = ["${local.address_prefix}.4.0/24"]
   enforce_private_link_endpoint_network_policies = true
+  service_endpoints                              = ["Microsoft.Storage"]
 
 }
 

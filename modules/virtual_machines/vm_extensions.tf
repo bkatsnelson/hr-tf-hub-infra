@@ -1,5 +1,5 @@
 #----------------------------------------------------------
-# Add Management Agent Extention 
+# Add Management Agent Extension 
 #----------------------------------------------------------
 
 resource "azurerm_virtual_machine_extension" "vmlinux01_omsagent" {
@@ -22,7 +22,7 @@ PROTECTED_SETTINGS
 }
 
 #----------------------------------------------------------
-# Add Guest Configuration Agent Extention 
+# Add Guest Configuration Agent Extension 
 #----------------------------------------------------------
 
 resource "azurerm_virtual_machine_extension" "vmlinux01_guest_configuration" {
@@ -34,6 +34,20 @@ resource "azurerm_virtual_machine_extension" "vmlinux01_guest_configuration" {
   auto_upgrade_minor_version = "true"
   automatic_upgrade_enabled  = true
 }
+
+#----------------------------------------------------------
+# Add Network Watcher Agent Extension 
+#----------------------------------------------------------
+
+resource "azurerm_virtual_machine_extension" "vmlinux01_network_watcher" {
+  name                       = "netwatcher"
+  virtual_machine_id         = azurerm_linux_virtual_machine.vmlinux01.id
+  publisher                  = "Microsoft.Azure.NetworkWatcher"
+  type                       = "NetworkWatcherAgentLinux"
+  type_handler_version       = "1.4"
+  auto_upgrade_minor_version = "true"
+}
+
 
 #----------------------------------------------------------
 # Add Extention to Install Database Client Tools

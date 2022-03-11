@@ -177,6 +177,7 @@ module "virtual_machines" {
   asg_hub_js_windows_id      = module.application_security_groups.asg_hub_js_windows_id
   hub_law_workspace_id       = module.log_analytics_workspace.hub_law_workspace_id
   hub_law_primary_shared_key = module.log_analytics_workspace.hub_law_primary_shared_key
+  authorized_ip_ranges       = var.authorized_ip_ranges
   tags                       = local.tags
 }
 

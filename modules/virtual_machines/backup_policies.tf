@@ -18,9 +18,10 @@ resource "azurerm_recovery_services_vault" "hub_recovery_service_vault" {
 #---------------------------------------------------------------------
 
 resource "azurerm_backup_policy_vm" "hub_vm_backup_policy" {
-  name                = "bplcy-vm-backup-policy-${var.resource_qualifier}"
-  resource_group_name = var.resource_group_name
-  recovery_vault_name = azurerm_recovery_services_vault.hub_recovery_service_vault.name
+  name                           = "bplcy-vm-backup-policy-${var.resource_qualifier}"
+  resource_group_name            = var.resource_group_name
+  recovery_vault_name            = azurerm_recovery_services_vault.hub_recovery_service_vault.name
+  instant_restore_retention_days = 1
 
   timezone = "Eastern Standard Time"
 
@@ -33,5 +34,7 @@ resource "azurerm_backup_policy_vm" "hub_vm_backup_policy" {
     count = 7
   }
 
-  tags = var.tags
+  // Does not work - 03/11/2022
+  // tags = var.tags
+
 }

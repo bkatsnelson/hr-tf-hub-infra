@@ -61,7 +61,7 @@ resource "azurerm_linux_virtual_machine" "vmlinux01" {
   admin_username                  = "azureuser"
   disable_password_authentication = true
   network_interface_ids           = [azurerm_network_interface.nic_vmlinux01.id]
-  size                            = "Standard_B1ms"
+  size                            = "Standard_B2ms"
   patch_mode                      = "AutomaticByPlatform"
   provision_vm_agent              = true
 
@@ -81,6 +81,10 @@ resource "azurerm_linux_virtual_machine" "vmlinux01" {
   admin_ssh_key {
     username   = "azureuser"
     public_key = tls_private_key.vmlinux01_private_key.public_key_openssh
+  }
+
+  boot_diagnostics {
+    storage_account_uri = azurerm_storage_account.hub_vm_diag_storage.primary_blob_endpoint
   }
 
   tags = var.tags
@@ -110,7 +114,10 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "vmlinux01_auto_shutdown
 # Configure Backup
 #----------------------------------------------------------
 
-resource "azurerm_backup_protected_vm" "vmlinux01backup" {
+// az backup container list 
+// --backup-management-type AzureIaasVM -g rg-hub-shr-use2-001 -v rsv-hub-shr-use2
+
+resource "azurerm_backup_protected_vm" "vmlinux01_backup" {
 
   resource_group_name = var.resource_group_name
   recovery_vault_name = azurerm_recovery_services_vault.hub_recovery_service_vault.name
@@ -120,4 +127,3 @@ resource "azurerm_backup_protected_vm" "vmlinux01backup" {
   tags = var.tags
 
 }
-
