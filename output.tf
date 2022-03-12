@@ -23,3 +23,6 @@ output "asg_hub_js_linux_id" {
 output "asg_hub_js_windows_id" {
   value = module.application_security_groups.asg_hub_js_windows_id
 }
+output "company" {
+  value = var.company
+}
