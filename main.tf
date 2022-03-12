@@ -21,7 +21,7 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "cloud-shell-storage-eastus"
+    resource_group_name  = "rg-cloud-shell-nonprod-use"
     storage_account_name = "stsmbcbkatsnelsonuse"
     container_name       = "tf-hub-infra"
     key                  = "terraform.state"
