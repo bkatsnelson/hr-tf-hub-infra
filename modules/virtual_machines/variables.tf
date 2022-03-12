@@ -37,5 +37,11 @@ variable "hub_law_primary_shared_key" {
 variable "authorized_ip_ranges" {
   type = list(any)
 }
+variable "hub_key_vault_001_id" {
+  type = string
+}
+variable "tenant_id" {
+  type = string
+}
 
 

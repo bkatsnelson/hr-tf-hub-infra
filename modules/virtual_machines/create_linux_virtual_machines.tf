@@ -1,15 +1,15 @@
 
-#---------------------------------------------------------------
+#------------------------------------------------------------------------
 # Define Local Variables
-#---------------------------------------------------------------
+#------------------------------------------------------------------------
 
 locals {
   vm_prefix = "vm${var.app}${var.environment}linux"
 }
 
-#---------------------------------------------------------------
-# Create Virtual Machines
-#---------------------------------------------------------------
+#------------------------------------------------------------------------
+# Create Virtual Machines Public IP and Network Interface
+#------------------------------------------------------------------------
 
 resource "azurerm_public_ip" "pip_vmlinux01" {
   name                = "pip_${local.vm_prefix}01"
@@ -36,10 +36,18 @@ resource "azurerm_network_interface" "nic_vmlinux01" {
   tags = var.tags
 }
 
+#------------------------------------------------------------------------
+# Assign NIC to Application Securoty Group
+#------------------------------------------------------------------------
+
 resource "azurerm_network_interface_application_security_group_association" "asg_dmz_vmlinux01_association" {
   network_interface_id          = azurerm_network_interface.nic_vmlinux01.id
   application_security_group_id = var.asg_hub_js_linux_id
 }
+
+#------------------------------------------------------------------------
+# Create VM Public and Private Keys
+#------------------------------------------------------------------------
 
 resource "tls_private_key" "vmlinux01_private_key" {
   algorithm = "RSA"
@@ -47,12 +55,34 @@ resource "tls_private_key" "vmlinux01_private_key" {
 }
 
 resource "azurerm_ssh_public_key" "vmlinux01_ssh_public_key" {
-  name                = "vmhubshrlinux01_ssh_public_key"
+  name                = "${local.vm_prefix}01_ssh_public_key"
   location            = var.location
   resource_group_name = var.resource_group_name
   public_key          = tls_private_key.vmlinux01_private_key.public_key_openssh
   tags                = var.tags
 }
+
+#------------------------------------------------------------------------
+# Create Managed Disk
+#------------------------------------------------------------------------
+
+resource "azurerm_managed_disk" "vmlinux01_managed_disk_001" {
+  name                 = "${local.vm_prefix}01-managed-disk-001"
+  location             = var.location
+  resource_group_name  = var.resource_group_name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = "1"
+
+  disk_encryption_set_id = azurerm_disk_encryption_set.hub_js_disk_encryption_set_001.id
+
+  tags = var.tags
+
+}
+
+#------------------------------------------------------------------------
+# Create Virtual Machine
+#------------------------------------------------------------------------
 
 resource "azurerm_linux_virtual_machine" "vmlinux01" {
   name                            = "${local.vm_prefix}01"
@@ -72,10 +102,11 @@ resource "azurerm_linux_virtual_machine" "vmlinux01" {
     version   = "latest"
   }
   os_disk {
-    name                 = "${local.vm_prefix}01_OsDisk_1"
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-    disk_size_gb         = 30
+    name                   = "${local.vm_prefix}01_OsDisk_1"
+    caching                = "ReadWrite"
+    storage_account_type   = "Standard_LRS"
+    disk_size_gb           = 30
+    disk_encryption_set_id = azurerm_disk_encryption_set.hub_js_disk_encryption_set_001.id
   }
 
   admin_ssh_key {
@@ -124,6 +155,7 @@ resource "azurerm_backup_protected_vm" "vmlinux01_backup" {
   source_vm_id        = azurerm_linux_virtual_machine.vmlinux01.id
   backup_policy_id    = azurerm_backup_policy_vm.hub_vm_backup_policy.id
 
-  tags = var.tags
+  // Does not work 03/2022
+  // tags = var.tags
 
 }

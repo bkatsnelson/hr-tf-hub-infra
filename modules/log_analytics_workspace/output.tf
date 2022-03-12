@@ -4,3 +4,6 @@ output "hub_law_workspace_id" {
 output "hub_law_primary_shared_key" {
   value = azurerm_log_analytics_workspace.log_analytics_workspace.primary_shared_key
 }
+output "hub_law_id" {
+  value = azurerm_log_analytics_workspace.log_analytics_workspace.id
+}
