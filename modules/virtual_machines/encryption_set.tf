@@ -19,6 +19,8 @@ resource "azurerm_key_vault_key" "hub_js_des_key_001" {
     azurerm_key_vault_access_policy.current_user
   ]
 
+  expiration_date = "2024-03-12T14:00:00Z"
+
   key_opts = [
     "decrypt",
     "encrypt",
@@ -64,6 +66,7 @@ resource "azurerm_key_vault_access_policy" "current_user" {
     "create",
     "delete",
     "list",
-    "recover"
+    "recover",
+    "update"
   ]
 }

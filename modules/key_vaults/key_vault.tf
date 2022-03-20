@@ -15,10 +15,10 @@ resource "azurerm_key_vault" "hub_key_vault_001" {
   purge_protection_enabled = true
 
   network_acls {
-    bypass                     = "AzureServices"
-    default_action             = "Deny"
-    ip_rules                   = var.authorized_ip_ranges
-    virtual_network_subnet_ids = var.key_vault_subnets
+    bypass         = "AzureServices"
+    default_action = "Deny"
+    ip_rules       = var.authorized_ip_ranges
+    // virtual_network_subnet_ids = var.key_vault_subnets
   }
 
   tags = var.tags
@@ -80,3 +80,25 @@ resource "azurerm_monitor_diagnostic_setting" "hub_key_vault_001_law_diag" {
   }
 }
 
+#-----------------------------------------------------------------
+# Create Hub Key Vault Private Endpoint
+#-----------------------------------------------------------------
+
+resource "azurerm_private_endpoint" "hub_key_vault_001_private_endpoint" {
+  name                = "pe-kv-${var.resource_qualifier}-001"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.key_vault_subnet_id
+
+  private_dns_zone_group {
+    name                 = "pdnszgroup-kv-${var.resource_qualifier}-001"
+    private_dns_zone_ids = [var.hub_key_vaukt_private_dns_id]
+  }
+
+  private_service_connection {
+    name                           = azurerm_key_vault.hub_key_vault_001.name
+    private_connection_resource_id = azurerm_key_vault.hub_key_vault_001.id
+    is_manual_connection           = false
+    subresource_names              = ["vault"]
+  }
+}
