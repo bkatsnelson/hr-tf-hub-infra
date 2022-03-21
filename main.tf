@@ -75,17 +75,6 @@ module "network_watcher" {
 }
 
 #----------------------------------------------------------
-# Create Hub Log Analytics Wowrkspace
-#----------------------------------------------------------
-
-module "log_analytics_workspace" {
-  source              = "./modules/log_analytics_workspace"
-  location            = var.location
-  resource_qualifier  = local.resource_qualifier
-  resource_group_name = module.resource_groups.rg_hub_infra_name
-  tags                = local.tags
-}
-#----------------------------------------------------------
 # Create Application Security Groups
 #----------------------------------------------------------
 
@@ -160,6 +149,35 @@ module "hub_private_dns" {
 }
 
 #----------------------------------------------------------
+# Create Storage Accounts
+#----------------------------------------------------------
+
+module "storage_accounts" {
+  source = "./modules/storage_accounts"
+
+  location                   = var.location
+  resource_group_name        = module.resource_groups.rg_hub_infra_name
+  resource_qualifier         = local.resource_qualifier
+  storage_accounts_subnet_id = module.hub_infra_vnet.storage_accounts_subnet_id
+  hub_blob_private_dns_id    = module.hub_private_dns.hub_blob_private_dns_id
+  authorized_ip_ranges       = var.authorized_ip_ranges
+  tags                       = local.tags
+}
+
+#----------------------------------------------------------
+# Create Hub Log Analytics Wowrkspace
+#----------------------------------------------------------
+
+module "log_analytics_workspace" {
+  source              = "./modules/log_analytics_workspace"
+  location            = var.location
+  resource_qualifier  = local.resource_qualifier
+  resource_group_name = module.resource_groups.rg_hub_infra_name
+  hub_diag_storage_id = module.storage_accounts.hub_diag_storage_id
+  tags                = local.tags
+}
+
+#----------------------------------------------------------
 # Create Key Vault and Keys
 #----------------------------------------------------------
 
@@ -172,9 +190,9 @@ module "key_vaults" {
   tenant_id                    = var.tenant_id
   authorized_ip_ranges         = var.authorized_ip_ranges
   hub_law_id                   = module.log_analytics_workspace.hub_law_id
+  hub_diag_storage_id          = module.storage_accounts.hub_diag_storage_id
   key_vault_subnet_id          = module.hub_infra_vnet.key_vault_subnet_id
   hub_key_vaukt_private_dns_id = module.hub_private_dns.hub_key_vaukt_private_dns_id
-  hub_blob_private_dns_id      = module.hub_private_dns.hub_blob_private_dns_id
   tags                         = local.tags
 }
 

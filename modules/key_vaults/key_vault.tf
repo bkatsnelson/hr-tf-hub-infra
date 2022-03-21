@@ -32,7 +32,7 @@ resource "azurerm_key_vault" "hub_key_vault_001" {
 resource "azurerm_monitor_diagnostic_setting" "hub_key_vault_001_st_diag" {
   name               = "kv-${var.resource_qualifier}-001-st-diag"
   target_resource_id = azurerm_key_vault.hub_key_vault_001.id
-  storage_account_id = azurerm_storage_account.hub_kv_diag_storage.id
+  storage_account_id = var.hub_diag_storage_id
 
   log {
     category = "AuditEvent"
@@ -100,5 +100,24 @@ resource "azurerm_private_endpoint" "hub_key_vault_001_private_endpoint" {
     private_connection_resource_id = azurerm_key_vault.hub_key_vault_001.id
     is_manual_connection           = false
     subresource_names              = ["vault"]
+  }
+}
+
+#-----------------------------------------------------------------
+# Add Hub Key Vault Private Endpoint Diagnostics
+#-----------------------------------------------------------------
+
+resource "azurerm_monitor_diagnostic_setting" "hub_pe_key_vault_001_st_diag" {
+  name               = "pe-kv-${var.resource_qualifier}-001-st-diag"
+  target_resource_id = azurerm_private_endpoint.hub_key_vault_001_private_endpoint.network_interface[0].id
+  storage_account_id = var.hub_diag_storage_id
+
+  metric {
+    category = "AllMetrics"
+
+    retention_policy {
+      enabled = true
+      days    = 7
+    }
   }
 }

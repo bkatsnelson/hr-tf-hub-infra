@@ -16,8 +16,8 @@ variable "authorized_ip_ranges" {
 variable "hub_law_id" {
   type = string
 }
-variable "tags" {
-  type = map(any)
+variable "hub_diag_storage_id" {
+  type = string
 }
 variable "key_vault_subnet_id" {
   type = string
@@ -25,6 +25,6 @@ variable "key_vault_subnet_id" {
 variable "hub_key_vaukt_private_dns_id" {
   type = string
 }
-variable "hub_blob_private_dns_id" {
-  type = string
+variable "tags" {
+  type = map(any)
 }
